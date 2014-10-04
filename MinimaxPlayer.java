@@ -163,7 +163,7 @@ final class MinimaxCalculator {
 		Move[] moves = board.getPossibleMoves(maxPlayer);
 
 		// set maxValue to -infinity
-		int maxValue = Integer.MIN_VALUE;
+		int maxValue = MIN_POSSIBLE_STRENGTH;
 
 		// explore each move in turn
 		for (int i = 0; i < moves.length; i++) {
@@ -195,7 +195,7 @@ final class MinimaxCalculator {
 		Move[] moves = board.getPossibleMoves(minPlayer);
 
 		// set minValue to infinity
-		int minValue = Integer.MAX_VALUE;
+		int minValue = MAX_POSSIBLE_STRENGTH;
 		
 		// explore each move in turn
 		for (int i = 0; i < moves.length; i++) {
