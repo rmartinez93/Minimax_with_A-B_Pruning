@@ -86,7 +86,9 @@ final class MinimaxCalculator {
 
 	private final int MAX_POSSIBLE_STRENGTH;
 	private final int MIN_POSSIBLE_STRENGTH;
-
+	
+	private int alpha;
+	private int beta;
 	// -------------------------------------------------------
 	// constructors
 	MinimaxCalculator(Board b, Player max, Player min) {
@@ -125,7 +127,12 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
-				// TODO: Add a/b pruning
+				
+				// begin a/b pruning
+				alpha = Integer.MIN_VALUE;
+				beta  = Integer.MAX_VALUE;
+				
+				//minimax
 				int value = expandMaxNode(depth);
 				if(value > maxValue) {
 					maxValue = value;
@@ -170,10 +177,15 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
-				// TODO: add a/b pruning 
+				//minimax
 				maxValue = max(maxValue, expandMinNode(depth - 1));
-
+				
 				board.undoLastMove(); // undo exploratory move
+				
+				// a/b pruning
+				if(maxValue >= beta)
+					return maxValue;
+				alpha = max(alpha, maxValue);
 			} // end if move made
 
 		}// end for all moves
@@ -202,10 +214,15 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
-				// TODO: add a/b pruning
+				//minimax
 				minValue = min(minValue, expandMaxNode(depth - 1));
 
 				board.undoLastMove(); // undo exploratory move
+				
+				//a/b pruning
+				if(minValue <= alpha)
+					return minValue;
+				beta = min(beta, minValue);
 			} // end if move made
 
 		}// end for all moves
