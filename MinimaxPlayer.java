@@ -87,6 +87,7 @@ final class MinimaxCalculator {
 	private final int MAX_POSSIBLE_STRENGTH;
 	private final int MIN_POSSIBLE_STRENGTH;
 	
+	private boolean pruning = true; //toggles a/b pruning
 	private int alpha;
 	private int beta;
 	// -------------------------------------------------------
@@ -128,9 +129,11 @@ final class MinimaxCalculator {
 			{
 				moveCount++; // global variable
 				
-				// begin a/b pruning
-				alpha = Integer.MIN_VALUE;
-				beta  = Integer.MAX_VALUE;
+				if(pruning) {
+					// begin a/b pruning
+					alpha = Integer.MIN_VALUE;
+					beta  = Integer.MAX_VALUE;
+				}
 				
 				//minimax
 				int value = expandMaxNode(depth);
@@ -182,10 +185,12 @@ final class MinimaxCalculator {
 				
 				board.undoLastMove(); // undo exploratory move
 				
-				// a/b pruning
-				if(maxValue >= beta)
-					return maxValue;
-				alpha = max(alpha, maxValue);
+				if(pruning) {
+					// a/b pruning
+					if(maxValue >= beta)
+						return maxValue;
+					alpha = max(alpha, maxValue);
+				}
 			} // end if move made
 
 		}// end for all moves
@@ -219,10 +224,12 @@ final class MinimaxCalculator {
 
 				board.undoLastMove(); // undo exploratory move
 				
-				//a/b pruning
-				if(minValue <= alpha)
-					return minValue;
-				beta = min(beta, minValue);
+				if(pruning) {
+					//a/b pruning
+					if(minValue <= alpha)
+						return minValue;
+					beta = min(beta, minValue);
+				}
 			} // end if move made
 
 		}// end for all moves
