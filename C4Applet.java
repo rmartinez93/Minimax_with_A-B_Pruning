@@ -46,7 +46,7 @@ public class C4Applet extends Applet
 	private ImagePanel imagePanel;
 
 	private MinimaxPlayer computer;
-	private AsynchronousPlayer human; 
+	private MinimaxPlayer human; 
 	private C4Board board;
 	private GameMaster gameMaster;
 	
@@ -93,8 +93,8 @@ public class C4Applet extends Applet
 		removeAll();
     
 		//create the game
-		human = new AsynchronousPlayer("human",C4Board.FIRST_PLAYER_NUMBER);
-		computer = new MinimaxPlayer("computer", C4Board.SECOND_PLAYER_NUMBER, human);	
+		human = new MinimaxPlayer("Ruben & Zack",C4Board.FIRST_PLAYER_NUMBER, computer);
+		computer = new MinimaxPlayer("Majercik", C4Board.SECOND_PLAYER_NUMBER, human);	
 		computer.setDepth(STARTING_DEPTH);
 		board = new C4Board(human, computer);
 		Player[] players = new Player[2];
@@ -134,7 +134,7 @@ public class C4Applet extends Applet
 		this.add(controlPanel, BorderLayout.SOUTH);
     
 		//the image panel draws the board.
-		imagePanel = new ImagePanel(gameMaster, board, computer, human,boardImage, redPieceImage, blackPieceImage);
+		imagePanel = new ImagePanel(gameMaster, board, computer, human, boardImage, redPieceImage, blackPieceImage);
 		this.add(imagePanel, BorderLayout.CENTER);
  	
 	}
@@ -257,7 +257,7 @@ class ImagePanel extends Panel implements GameEventListener
   
 	private GameMaster game;
 	private Player computer;
-	private AsynchronousPlayer human;
+	private Player human;
 	private C4Board board;
 	
 	//the column in which the mouse is currently in, if -1, the mouse is in no column
@@ -267,7 +267,7 @@ class ImagePanel extends Panel implements GameEventListener
 //----------------------------------------
 	//constructors
 	
-	ImagePanel(GameMaster aGame, C4Board aBoard, Player computer, AsynchronousPlayer human, 
+	ImagePanel(GameMaster aGame, C4Board aBoard, Player computer, Player human, 
 				Image boardImage, Image redPieceImage, Image blackPieceImage)
 	{
 		super();
@@ -363,7 +363,7 @@ class ImagePanel extends Panel implements GameEventListener
 		if(blackColumn != -1)
 		{
 			C4Move move = new C4Move(human, blackColumn);
-			human.makeMove(move);
+			//human.makeMove(move);
 		}
 		return true;
 	}
@@ -451,11 +451,11 @@ class ImagePanel extends Panel implements GameEventListener
 			offscreenGraphics.setColor(Color.black);
 			if(board.getBoardStats().getScore(human) != 0)
 			{
-				offscreenGraphics.drawString("You win", TEXT_TOP_X, TEXT_TOP_Y);
+				offscreenGraphics.drawString(human.getName()+" win", TEXT_TOP_X, TEXT_TOP_Y);
 			}
 			else if(board.getBoardStats().getScore(computer) != 0)
 			{
-				offscreenGraphics.drawString("You lose", TEXT_TOP_X, TEXT_TOP_Y);
+				offscreenGraphics.drawString(computer.getName()+" wins", TEXT_TOP_X, TEXT_TOP_Y);
 			}
 			else
 			{
@@ -480,6 +480,10 @@ class ImagePanel extends Panel implements GameEventListener
 	 */
 	public void moveMade(Move aMove) 
 	{
+		//pauses execution to slow down game
+		try { Thread.sleep(250); } 
+		catch (InterruptedException e) { }
+		
 		int column = aMove.toInt();
 		int row = board.numerOfChipsInColumn(column) - 1;
 		
