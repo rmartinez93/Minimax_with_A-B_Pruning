@@ -136,7 +136,7 @@ final class MinimaxCalculator {
 				}
 				
 				//minimax
-				int value = expandMaxNode(depth);
+				int value = expandMinNode(depth-1);
 				if(value > maxValue) {
 					maxValue = value;
 					maxIndex = i;
@@ -174,12 +174,13 @@ final class MinimaxCalculator {
 
 		// set maxValue to -infinity
 		int maxValue = MIN_POSSIBLE_STRENGTH;
-
+		
 		// explore each move in turn
 		for (int i = 0; i < moves.length; i++) {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
+				System.out.println("Max, Depth: "+depth+", Column: "+moves[i].toInt()+", Strength: "+board.getBoardStats().getStrength(maxPlayer));
 				//minimax
 				maxValue = max(maxValue, expandMinNode(depth - 1));
 				
@@ -219,6 +220,7 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
+				System.out.println("Min, Depth: "+depth+", Column: "+moves[i].toInt()+", Strength: "+board.getBoardStats().getStrength(maxPlayer));
 				//minimax
 				minValue = min(minValue, expandMaxNode(depth - 1));
 
