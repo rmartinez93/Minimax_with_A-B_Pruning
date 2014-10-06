@@ -122,18 +122,18 @@ final class MinimaxCalculator {
 		//index and value of best move so far
 		int maxIndex = -1;
 		int maxValue = MIN_POSSIBLE_STRENGTH;
-		
+
+		if(pruning) {
+			// begin a/b pruning
+			alpha = Integer.MIN_VALUE;
+			beta  = Integer.MAX_VALUE;
+		}
+			
 		// explore each move in turn
 		for (int i = 0; i < moves.length; i++) {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
-				moveCount++; // global variable
-				
-				if(pruning) {
-					// begin a/b pruning
-					alpha = Integer.MIN_VALUE;
-					beta  = Integer.MAX_VALUE;
-				}
+				moveCount++; // global variable}
 				
 				//minimax
 				int value = expandMinNode(depth-1);
@@ -141,6 +141,8 @@ final class MinimaxCalculator {
 					maxValue = value;
 					maxIndex = i;
 				}
+				
+				System.out.println(alpha+", "+beta);
 
 				board.undoLastMove(); // undo exploratory move
 			} // end if move made
@@ -165,7 +167,7 @@ final class MinimaxCalculator {
 	 */
 	private int expandMaxNode(int depth) {
 		// if cutoff test is satisfied
-		if (depth == 0 /* OR terminal node */) {
+		if (depth == 0 || board.isGameOver()) {
 			return board.getBoardStats().getStrength(maxPlayer);
 		}
 
@@ -180,7 +182,7 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
-				System.out.println("Max, Depth: "+depth+", Column: "+moves[i].toInt()+", Strength: "+board.getBoardStats().getStrength(maxPlayer));
+
 				//minimax
 				maxValue = max(maxValue, expandMinNode(depth - 1));
 				
@@ -205,7 +207,7 @@ final class MinimaxCalculator {
 	 */
 	private int expandMinNode(int depth) {
 		// if cutoff test is satisfied
-		if (depth == 0 /* OR terminal node */) {
+		if (depth == 0 || board.isGameOver()) {
 			return board.getBoardStats().getStrength(maxPlayer);
 		}
 
@@ -220,7 +222,7 @@ final class MinimaxCalculator {
 			if (board.move(moves[i])) // move was legal (column was not full)
 			{
 				moveCount++; // global variable
-				System.out.println("Min, Depth: "+depth+", Column: "+moves[i].toInt()+", Strength: "+board.getBoardStats().getStrength(maxPlayer));
+
 				//minimax
 				minValue = min(minValue, expandMaxNode(depth - 1));
 
