@@ -165,7 +165,8 @@ public class C4Applet extends Applet
 	{
 		if(arg.equals("restart"))
 		{
-			gameMaster.restartGame();	
+			gameMaster.restartGame();
+					computer.resetStats();	
 		}
 		else if(evt.target.equals(levels))
 		{
@@ -473,6 +474,7 @@ class ImagePanel extends Panel implements GameEventListener
 	{
 		lastComputerMove = null; 
 		resetOffScreen();
+		System.out.println("-----------------------------------------");
 	}
 	
 	/**

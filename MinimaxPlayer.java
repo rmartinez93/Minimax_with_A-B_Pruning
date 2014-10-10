@@ -21,6 +21,10 @@ public class MinimaxPlayer extends DefaultPlayer {
 	// the number of levels minimax will look ahead
 	private int depth = 1;
 	private Player minPlayer;
+		public int totalMoves = 0;
+	public long totalTime = 0;
+		public int moves = 0;
+
 
 	// ----------------------------------------------
 	// constructors
@@ -30,6 +34,13 @@ public class MinimaxPlayer extends DefaultPlayer {
 		super(name, number);
 
 		this.minPlayer = minPlayer;
+
+	}
+
+	public void resetStats() {
+			 this.totalMoves = 0;
+	this.totalTime = 0;
+	this.moves = 0;
 	}
 
 	// ----------------------------------------------
@@ -61,7 +72,13 @@ public class MinimaxPlayer extends DefaultPlayer {
 	 */
 	public Move getMove(Board b) {
 		MinimaxCalculator calc = new MinimaxCalculator(b, this, minPlayer);
-		return calc.calculateMove(depth);
+		Move value = calc.calculateMove(depth);
+		totalMoves += calc.totalMoves;
+		totalTime += calc.totalTime;
+		moves++;
+System.out.println("Total Moves: " + totalMoves + "  Total Time: "
+				+ totalTime + " Moves Played: " + moves);
+		return value ;
 	}
 
 }// end MinimaxPlayer
@@ -72,6 +89,9 @@ public class MinimaxPlayer extends DefaultPlayer {
  * should only be used once.
  */
 final class MinimaxCalculator {
+		public int totalMoves = 0;
+	public long totalTime = 0;
+	public int moves = 0;
 
 	// -------------------------------------------------------
 	// instance variables
@@ -142,7 +162,6 @@ final class MinimaxCalculator {
 					maxIndex = i;
 				}
 				
-				System.out.println(alpha+", "+beta);
 
 				board.undoLastMove(); // undo exploratory move
 			} // end if move made
@@ -155,8 +174,12 @@ final class MinimaxCalculator {
 		}// end for all moves
 
 		long stopTime = System.currentTimeMillis();
+	totalMoves =  totalMoves + moveCount;
+		totalTime =  totalTime +(stopTime - startTime);
 		System.out.println("Number of moves tried = " + moveCount + "  Time = "
 				+ (stopTime - startTime) + " milliseconds");
+		/*System.out.println("Total Moves: " + totalMoves + "  Total Time: "
+				+ totalTime + " milliseconds");*/
 
 		// maxIndex is the index of the move to be made
 		return moves[maxIndex];
