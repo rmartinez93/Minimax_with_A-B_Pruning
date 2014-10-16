@@ -29,7 +29,8 @@ public class GameMaster
 	private Board board;
 	private int currentPlayerIndex = 0;
 	private GameThread gameThread;
-    
+	private int numGamesPlayed = 0; //how many games have we played so far?
+    private int currentDepth;
   
 //--------------------------------------------------------
 	//constructor
@@ -41,7 +42,7 @@ public class GameMaster
 	 * players will move.
 	 * If the array is empty, an ArrayOutOfBoundsException will be thrown.
 	 */
-	public GameMaster(Board board, Player[] players ) 
+	public GameMaster(Board board, Player[] players, int startingDepth) 
 	{
     
 		if(players.length == 0)
@@ -52,7 +53,7 @@ public class GameMaster
     
 		this.board = board;
 		this.players = players;
-    
+		this.currentDepth = startingDepth;
 	}
 
 //--------------------------------------------------------
@@ -202,13 +203,12 @@ public class GameMaster
 			gameThread.stopThread();
 			gameThread = null;
 		}
-    
+		System.out.println("GAME RESTARTED");
 		board.gameRestarted();
 		currentPlayerIndex = 0;
 		gameThread = new GameThread();
 		gameThread.start();
 		notifyListenersGameReStarted();
-    
 	}   
   
   
@@ -269,6 +269,12 @@ public class GameMaster
 			if(active && board.isGameOver())
 			{
 				notifyListenersGameStoped();
+				numGamesPlayed++;
+				if(numGamesPlayed < 80) {
+					restartGame(); //causes loop of games
+					if(numGamesPlayed % 10 == 9)
+						((MinimaxPlayer) players[1]).setDepth(++currentDepth);
+				}
 			}
 
 			active = false;

@@ -76,7 +76,9 @@ public class MinimaxPlayer extends DefaultPlayer {
 		totalMoves += calc.totalMoves;
 		totalTime += calc.totalTime;
 		moves++;
-System.out.println("Total Moves: " + totalMoves + "  Total Time: "
+		
+		//
+		System.out.println("Total Moves: " + totalMoves + "  Total Time: "
 				+ totalTime + " Moves Played: " + moves);
 		return value ;
 	}
@@ -176,7 +178,7 @@ final class MinimaxCalculator {
 		long stopTime = System.currentTimeMillis();
 	totalMoves =  totalMoves + moveCount;
 		totalTime =  totalTime +(stopTime - startTime);
-		System.out.println("Number of moves tried = " + moveCount + "  Time = "
+		System.out.println("Number of moves tried = " + moveCount + "\tTime = "
 				+ (stopTime - startTime) + " milliseconds");
 		/*System.out.println("Total Moves: " + totalMoves + "  Total Time: "
 				+ totalTime + " milliseconds");*/

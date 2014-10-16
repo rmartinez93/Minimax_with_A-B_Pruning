@@ -1,3 +1,5 @@
+import java.util.Random;
+
 // AsynchronousPlayer.java
  
 
@@ -23,6 +25,7 @@ public class AsynchronousPlayer extends DefaultPlayer
 	//instance variables
     
 	private Move lastMove = null;
+	private Random moveGenerator = new Random();
 
   
 	/** Creates new AsynchronousPlayer */
@@ -39,19 +42,28 @@ public class AsynchronousPlayer extends DefaultPlayer
 	*/
 	public synchronized  Move getMove(Board b)
 	{
-		try
-		{
-			wait();
+//		try
+//		{
+//			wait();
+//		}
+//		//if we are interrupted, then it means the game
+//		//is over, and we no one cares about what we return, 
+//		//so return null.
+//		catch(InterruptedException e)
+//		{
+//			return null;
+//		}
+		
+		//makes moves randomly
+		Move move = new C4Move(this, moveGenerator.nextInt(8));
+		while(!b.move(move)) { //loops until valid move found
+			b.undoLastMove();  //move unvalid, undo last move
+			move = new C4Move(this, moveGenerator.nextInt(8));
 		}
-		//if we are interrupted, then it means the game
-		//is over, and we no one cares about what we return, 
-		//so return null.
-		catch(InterruptedException e)
-		{
-			return null;
-		}
-  	 
-		return lastMove;
+
+		b.undoLastMove(); //move valid, undo last move
+		
+		return move;
 	}
   
   

@@ -69,8 +69,6 @@ public final class C4Board implements Board
 			secondPlayerMoves[i] = new C4Move(secondPlayer, i);
 		}
 		
-		
-		
 	}//end constructor
   
 //--------------------------------------
@@ -217,6 +215,7 @@ public final class C4Board implements Board
 		}
 		
 		moveHistoryLength = 0;
+		
 	}
 	
 //-----------------------------------------

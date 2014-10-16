@@ -32,8 +32,8 @@ public class C4Applet extends Applet
 	private final static String L7 = "Level 7";
 	private final static String L8 = "Level 8";
 	
-	private final static String STARTING_LEVEL = L4;
-	private final static int STARTING_DEPTH = 4;
+	private final static String STARTING_LEVEL = L1;
+	private final static int STARTING_DEPTH = 1;
 	
 	private final static String RED_PIECE_IMAGE_NAME = "redpiece.gif";
 	private final static String BLACK_PIECE_IMAGE_NAME = "blackpiece.gif";
@@ -49,6 +49,7 @@ public class C4Applet extends Applet
 	private AsynchronousPlayer human; 
 	private C4Board board;
 	private GameMaster gameMaster;
+	private int currentDepth = STARTING_DEPTH;
 	
 //------------------------------------------------
 	//instance methods
@@ -101,7 +102,7 @@ public class C4Applet extends Applet
 		players[0] = human;
 		players[1] = computer;
     
-		gameMaster = new GameMaster(board, players);
+		gameMaster = new GameMaster(board, players, STARTING_DEPTH);
     
 		//lay out the components
     
@@ -150,9 +151,7 @@ public class C4Applet extends Applet
 	{
 		System.out.println("C4Applet stopping");
 		gameMaster.stopGame();
-	}
-
-	
+	}	
 	
 	public String getAppletInfo()   
 	{
